@@ -1,27 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import axios from "axios";
 
 const Chat = () => {
   const [messages, setMessages] = useState([
-    { text: 'message1', isUser: false },
-    { text: 'message2', isUser: true },
-    { text: 'message3', isUser: false },
+    { text: "message1", isUser: false },
+    { text: "message2", isUser: true },
+    { text: "message3", isUser: false },
   ]);
 
-  const [newMessage, setNewMessage] = useState('');
+  const [newMessage, setNewMessage] = useState("");
   // const [isPanelOpen, setIsPanelOpen] = useState(false);
 
   const handleSendMessage = () => {
-    if (newMessage.trim() !== '') {
+    if (newMessage.trim() !== "") {
       setMessages([...messages, { text: newMessage, isUser: true }]);
-      setNewMessage('');
+      setNewMessage("");
 
-      // Simulate a response from ChatGPT (you can replace this with your API call)
-      setTimeout(() => {
-        setMessages([
-          ...messages,
-          { text: 'I am just a simple example, but you can make me smarter!', isUser: false },
-        ]);
-      }, 10000);
+      axios
+        .post("http://localhost:5000/chatbot/" + encodeURIComponent(newMessage))
+        .then((response) => {
+          setMessages([
+            ...messages,
+            { text: response.data.Answer, isUser: false },
+          ]);
+        })
+        .catch((error) => console.error("Error:", error));
     }
   };
 
@@ -35,29 +38,33 @@ const Chat = () => {
 
   return (
     <>
-    <div className="bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100">
-      <div className="flex h-screen w-3/4 m-auto ">
-        {/* <div className={`w-64 bg-white p-4 transition-all ease-in-out duration-300 ${isPanelOpen ? 'translate-x-0' : '-translate-x-64'}`}>
+      <div className="bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100">
+        <div className="flex h-screen w-3/4 m-auto ">
+          {/* <div className={`w-64 bg-white p-4 transition-all ease-in-out duration-300 ${isPanelOpen ? 'translate-x-0' : '-translate-x-64'}`}>
           
           <button onClick={togglePanel}>Toggle Panel</button>
         </div> */}
-        <div className="flex-grow w-1/2 p-4 overflow-y-auto">
-          {messages.map((message, index) => (
-            <div
-              key={index}
-              className={`mb-4 flex ${message.isUser ? 'justify-end' : 'justify-start'}`}
-            >
+          <div className="flex-grow w-1/2 p-4 overflow-y-auto">
+            {messages.map((message, index) => (
               <div
-                className={`${
-                  message.isUser ? 'bg-indigo-700 text-white' : 'bg-gray-200 text-gray-700'
-                } p-2 rounded-lg max-w-md`}
+                key={index}
+                className={`mb-4 flex ${
+                  message.isUser ? "justify-end" : "justify-start"
+                }`}
               >
-                {message.text}
+                <div
+                  className={`${
+                    message.isUser
+                      ? "bg-indigo-700 text-white"
+                      : "bg-gray-200 text-gray-700"
+                  } p-2 rounded-lg max-w-md`}
+                >
+                  {message.text}
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
-      </div>
       </div>
       {/* <div className="fixed bottom-4 left-4 bg-indigo-500 text-white px-4 py-2 rounded-full">
         <button onClick={openPanel}>Open Panel</button>
@@ -73,10 +80,12 @@ const Chat = () => {
           />
           <button
             className={`${
-              newMessage.trim() !== '' ? 'bg-indigo-500 text-white' : 'bg-gray-400 text-gray-700'
+              newMessage.trim() !== ""
+                ? "bg-indigo-500 text-white"
+                : "bg-gray-400 text-gray-700"
             } px-4 py-2 rounded-r-lg`}
             onClick={handleSendMessage}
-            disabled={newMessage.trim() === ''}
+            disabled={newMessage.trim() === ""}
           >
             Send
           </button>
