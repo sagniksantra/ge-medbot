@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
+import Navbar from "./components/Navbar";
 
 const Chat = () => {
   const [messages, setMessages] = useState([
@@ -42,6 +43,7 @@ const Chat = () => {
 
   return (
     <>
+    <Navbar />
       <div className="bg-gradient-to-r from-indigo-200 via-red-200 to-yellow-100 h-screen flex flex-col">
         <div className="flex-grow p-4 overflow-y-auto">
           {messages.map((message, index) => (

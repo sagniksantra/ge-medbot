@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import Navbar from "./components/Navbar";
 
 const Landing = () => {
   const [selectedOption, setSelectedOption] = useState("Option 1");
@@ -33,10 +34,16 @@ const Landing = () => {
   };
 
   return (
+    <>
+    <Navbar />
+    
     <div className="bg-gradient-to-r from-blue-500 via-blue-300 to-blue-500 h-screen flex justify-center items-center">
       <div className="bg-white p-8 rounded shadow-lg w-96 text-center">
-        <h1 className="text-3xl font-semibold mb-4">
-          Welcome to Our Landing Page
+        <h1 className="text-3xl font-semibold">
+          Welcome to 
+        </h1>
+        <h1 className="text-2xl font-semibold mb-4">
+          GE-medbot 
         </h1>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -86,6 +93,7 @@ const Landing = () => {
         </form>
       </div>
     </div>
+    </>
   );
 };
 
